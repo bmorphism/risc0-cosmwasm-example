@@ -6,6 +6,7 @@ use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult}
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
 
+use risc0_zkvm::host::ffi::Receipt;
 use risc0_zkvm_core::Digest;
 use risc0_zkvm_verify::zkvm::{MethodID, Receipt};
 
@@ -43,12 +44,11 @@ pub fn verify_receipt(receipt: String) -> Result<Response, ContractError> {
     let method_id = MethodID::try_from(methods::MULTIPLY_ID).unwrap();
     let as_bytes = base64::decode(receipt).unwrap();
     let receipt = bincode::deserialize::<Receipt>(&as_bytes).unwrap();
-
-    println!("rust");
+    print_type_of(&receipt);
 
     // Verify that the zero knowledge proof is valid
-    if !receipt.verify(&method_id).unwrap() {
-        println!("sad");
+    // PANCIS
+    if !receipt.verify(&method_id).is_ok() {
         return Err(ContractError::VerificationError {});
     };
 
@@ -75,14 +75,9 @@ mod tests {
     use methods::{MULTIPLY_ID, MULTIPLY_PATH};
     use risc0_zkvm::host::Prover;
     use risc0_zkvm::serde::{from_slice, to_vec};
-    
 
     #[test]
     fn test_verify_recipt() {
-        let _mock_deps = mock_dependencies();
-        let _mock_env = mock_env();
-        let _mock_info = mock_info("meow", &[]);
-
         // Pick two numbers
         let a: u64 = 7;
         let b: u64 = 191;
@@ -95,24 +90,29 @@ mod tests {
         prover.add_input(to_vec(&b).unwrap().as_slice()).unwrap();
         // Run prover & generate receipt
         let receipt = prover.run().unwrap();
+        print_type_of(&receipt);
 
         // Extract journal of receipt (i.e. output c, where c = a * b)
-        let c: u64 = from_slice(&receipt.get_journal_vec().unwrap()).unwrap();
-
+        let journal: u64 = from_slice(&receipt.get_journal_vec().unwrap()).unwrap();
         // Print an assertion
-        println!("I know the factors of {}, and I can prove it!", c);
+        println!("I know the factors of {}, and I can prove it!", journal);
+
+        // Verify receipt, panic if it's wrong
+        receipt.verify(MULTIPLY_ID).unwrap();
+        println!("CORRECT!");
 
         // Here is where one would send 'receipt' over the network...
-
-        // // Verify receipt, panic if it's wrong
-        // receipt.verify(MULTIPLY_ID).unwrap();
-        // println!("CORRECT!");
-
+        // We must encode as a String
         let encoded_receipt = base64::encode(bincode::serialize(&receipt).unwrap());
-        println!("{}", encoded_receipt);
+        // println!("{}", encoded_receipt);
 
+        //
         let res = verify_receipt(encoded_receipt);
         println!("{:?}", res);
-        assert!(res.is_ok());
+        // assert!(res.is_ok());
     }
+}
+
+fn print_type_of<T>(_: &T) {
+    println!("{}", std::any::type_name::<T>())
 }
