@@ -2,7 +2,6 @@ use methods::{MULTIPLY_ID, MULTIPLY_PATH};
 use risc0_zkvm::host::Prover;
 use risc0_zkvm::serde::{from_slice, to_vec};
 
-
 fn main() {
     // Pick two numbers
     let a: u64 = 7;
