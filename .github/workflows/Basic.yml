@@ -13,11 +13,11 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v2
 
-      - name: Install stable toolchain
+      - name: Install nightly toolchain
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: 1.58.1
+          toolchain: 1.63.0-nightly
           target: wasm32-unknown-unknown
           override: true
 
@@ -29,13 +29,14 @@ jobs:
         env:
           RUST_BACKTRACE: 1
 
-      - name: Compile WASM contract
-        uses: actions-rs/cargo@v1
-        with:
-          command: wasm
-          args: --locked
-        env:
-          RUSTFLAGS: "-C link-arg=-s"
+      ###### TODO Test contract compilation
+      # - name: Compile WASM contract
+      #   uses: actions-rs/cargo@v1
+      #   with:
+      #     command: wasm
+      #     args: --locked
+      #   env:
+      #     RUSTFLAGS: "-C link-arg=-s"
 
   lints:
     name: Lints
@@ -44,11 +45,11 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v2
 
-      - name: Install stable toolchain
+      - name: Install nightly toolchain
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: 1.58.1
+          toolchain: 1.63.0-nightly
           override: true
           components: rustfmt, clippy
 
@@ -64,12 +65,13 @@ jobs:
           command: clippy
           args: -- -D warnings
 
-      - name: Generate Schema
-        uses: actions-rs/cargo@v1
-        with:
-          command: schema
-          args: --locked
+      ##### TODO do contract tests
+      # - name: Generate Schema
+      #   uses: actions-rs/cargo@v1
+      #   with:
+      #     command: schema
+      #     args: --locked
 
-      - name: Schema Changes
-        # fails if any changes not committed
-        run: git diff --exit-code schema
+      # - name: Schema Changes
+      #   # fails if any changes not committed
+      #   run: git diff --exit-code schema
