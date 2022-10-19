@@ -15,8 +15,12 @@ pub enum ContractError {
 }
 
 impl From<risc0_zkvm_verify::zkp::verify::VerificationError> for ContractError {
-    fn from(
-        msg: risc0_zkvm_verify::zkp::verify::VerificationError,
-    ) -> ContractError::VerificationError {
+    fn from(msg: risc0_zkvm_verify::zkp::verify::VerificationError) -> ContractError {
+        match msg {
+            risc0_zkvm_verify::zkp::verify::VerificationError => {
+                ContractError::VerificationError {}
+            }
+            _ => unreachable!("cannot convert {:?} to contract message", msg),
+        }
     }
 }
