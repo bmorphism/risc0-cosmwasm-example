@@ -29,9 +29,9 @@ pub fn instantiate(
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn execute(
-    deps: DepsMut,
-    env: Env,
-    info: MessageInfo,
+    _deps: DepsMut,
+    _env: Env,
+    _info: MessageInfo,
     msg: ExecuteMsg,
 ) -> Result<Response, ContractError> {
     match msg {
@@ -75,13 +75,13 @@ mod tests {
     use methods::{MULTIPLY_ID, MULTIPLY_PATH};
     use risc0_zkvm::host::Prover;
     use risc0_zkvm::serde::{from_slice, to_vec};
-    use serde::Serialize;
+    
 
     #[test]
     fn test_verify_recipt() {
-        let mock_deps = mock_dependencies();
-        let mock_env = mock_env();
-        let mock_info = mock_info("meow", &[]);
+        let _mock_deps = mock_dependencies();
+        let _mock_env = mock_env();
+        let _mock_info = mock_info("meow", &[]);
 
         // Pick two numbers
         let a: u64 = 7;
