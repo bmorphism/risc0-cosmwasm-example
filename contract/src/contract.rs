@@ -6,10 +6,9 @@ use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult}
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
 
-use risc0_zkvm::host::{MethodId, Receipt};
-use risc0_zkvm_core::Digest;
+use risc0_zkvm::host::Receipt;
 
-use methods::{MULTIPLY_ID, MULTIPLY_PATH};
+use methods::MULTIPLY_ID;
 
 use methods;
 
@@ -65,7 +64,6 @@ pub fn query(_deps: Deps, _env: Env, _msg: QueryMsg) -> StdResult<Binary> {
 
 #[cfg(test)]
 mod tests {
-    use cosmwasm_std::testing::{mock_dependencies, mock_env, mock_info};
 
     use super::*;
 
@@ -87,7 +85,6 @@ mod tests {
         prover.add_input(to_vec(&b).unwrap().as_slice()).unwrap();
         // Run prover & generate receipt
         let receipt = prover.run().unwrap();
-        print_type_of(&receipt);
 
         // Extract journal of receipt (i.e. output c, where c = a * b)
         let journal: u64 = from_slice(&receipt.get_journal_vec().unwrap()).unwrap();
@@ -108,9 +105,4 @@ mod tests {
         println!("{:?}", res);
         assert!(res.is_ok());
     }
-}
-
-// TODO remove this debug util
-fn print_type_of<T>(_: &T) {
-    println!("{}", std::any::type_name::<T>())
 }
