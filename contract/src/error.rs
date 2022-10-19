@@ -10,4 +10,13 @@ pub enum ContractError {
     Unauthorized {},
     // Add any other custom errors you like here.
     // Look at https://docs.rs/thiserror/1.0.21/thiserror/ for details.
+    #[error("Verification error")]
+    VerificationError {},
+}
+
+impl From<risc0_zkvm_verify::zkp::verify::VerificationError> for ContractError {
+    fn from(
+        msg: risc0_zkvm_verify::zkp::verify::VerificationError,
+    ) -> ContractError::VerificationError {
+    }
 }

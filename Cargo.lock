@@ -57,6 +57,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ea2b2456fd614d856680dcd9fcc660a51a820fa09daef2e49772b56a193c8474"
 
 [[package]]
+name = "bincode"
+version = "1.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b1f45e9417d87227c7a56d22e471c6206462cba514c7590c09aff4cf6d1ddcad"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "bitflags"
 version = "1.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1530,12 +1539,18 @@ dependencies = [
 name = "risc0-cosmwasm-example"
 version = "0.1.0"
 dependencies = [
+ "base64",
+ "bincode",
  "cosmwasm-schema",
  "cosmwasm-std",
  "cosmwasm-storage",
  "cw-multi-test",
  "cw-storage-plus",
  "cw2",
+ "methods",
+ "risc0-zkvm-core",
+ "risc0-zkvm-serde",
+ "risc0-zkvm-verify",
  "schemars",
  "serde",
  "thiserror",
@@ -1559,6 +1574,33 @@ dependencies = [
  "rayon",
  "serde",
  "sha2 0.10.6",
+]
+
+[[package]]
+name = "risc0-zkp-core"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3dfd3bb0b4f2a4250d7332c3d647418502449e773b176552aae869537c4a96bf"
+dependencies = [
+ "anyhow",
+ "bytemuck",
+ "paste",
+ "rand",
+ "rand_core 0.6.4",
+ "serde",
+ "sha2 0.10.6",
+]
+
+[[package]]
+name = "risc0-zkp-hal"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ee56e70cfd8d0f40fbac1ea34b4bc5e1291ded8d3e147773fa9230458e2cb777"
+dependencies = [
+ "downcast-rs",
+ "rand",
+ "rayon",
+ "risc0-zkp-core",
 ]
 
 [[package]]
@@ -1629,6 +1671,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "risc0-zkvm-core"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ae75141a6d56ee0afe897796624aa33551400344f6bd0ac98fe87b0afacf8679"
+dependencies = [
+ "cfg-if",
+ "serde",
+]
+
+[[package]]
 name = "risc0-zkvm-platform"
 version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1645,6 +1697,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "risc0-zkvm-serde"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e9940df4961fffcdbafb4928efc0150d610926c0312fb3fb239b643dfe0c94e4"
+dependencies = [
+ "bytemuck",
+ "serde",
+]
+
+[[package]]
 name = "risc0-zkvm-sys"
 version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1657,6 +1719,25 @@ dependencies = [
  "risc0-zkvm-circuit-gen",
  "risc0-zkvm-circuit-sys",
  "tbb-sys",
+]
+
+[[package]]
+name = "risc0-zkvm-verify"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e0d55abcab3411be6c1ae73594fb28311f4f374e04e998f2284b22ca1dbf4839"
+dependencies = [
+ "anyhow",
+ "array-init",
+ "bytemuck",
+ "paste",
+ "rand",
+ "rand_core 0.6.4",
+ "risc0-zkp-core",
+ "risc0-zkp-hal",
+ "risc0-zkvm-serde",
+ "serde",
+ "sha2 0.10.6",
 ]
 
 [[package]]
