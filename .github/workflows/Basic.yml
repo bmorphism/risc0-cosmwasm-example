@@ -17,8 +17,8 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: 1.63.0-nightly
-          target: wasm32-unknown-unknown
+          toolchain: nightly
+          # target: wasm32-unknown-unknown
           override: true
 
       - name: Run unit tests
@@ -48,8 +48,8 @@ jobs:
       - name: Install nightly toolchain
         uses: actions-rs/toolchain@v1
         with:
-          profile: minimal
-          toolchain: 1.63.0-nightly
+          # profile: minimal
+          toolchain: nightly
           override: true
           components: rustfmt, clippy
 
