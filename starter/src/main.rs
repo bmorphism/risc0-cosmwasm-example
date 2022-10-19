@@ -5,8 +5,8 @@ use serde::Serialize;
 
 fn main() {
     // Pick two numbers
-    let a: u64 = 12;
-    let b: u64 = 4;
+    let a: u64 = 7;
+    let b: u64 = 191;
 
     // Multiply them inside the ZKP
     // First, we make the prover, loading the 'multiply' method
