@@ -1548,6 +1548,7 @@ dependencies = [
  "cw-storage-plus",
  "cw2",
  "methods",
+ "risc0-zkvm",
  "risc0-zkvm-core",
  "risc0-zkvm-serde",
  "risc0-zkvm-verify",
