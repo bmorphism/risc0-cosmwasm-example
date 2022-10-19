@@ -1,7 +1,7 @@
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
 use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult};
-// use cw2::set_contract_version;
+use cw2::set_contract_version;
 
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
@@ -12,20 +12,20 @@ use methods::MULTIPLY_ID;
 
 use methods;
 
-/*
 // version info for migration info
 const CONTRACT_NAME: &str = "crates.io:risc0-cosmwasm-example";
 const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
-*/
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn instantiate(
-    _deps: DepsMut,
+    deps: DepsMut,
     _env: Env,
     _info: MessageInfo,
     _msg: InstantiateMsg,
 ) -> Result<Response, ContractError> {
-    unimplemented!()
+    set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
+
+    Ok(Response::default())
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
@@ -40,6 +40,7 @@ pub fn execute(
     }
 }
 
+// This method does nothing but verify a receipt
 pub fn verify_receipt(receipt: String) -> Result<Response, ContractError> {
     let as_bytes = base64::decode(receipt).unwrap();
     let receipt = bincode::deserialize::<Receipt>(&as_bytes).unwrap();
@@ -49,10 +50,8 @@ pub fn verify_receipt(receipt: String) -> Result<Response, ContractError> {
         return Err(ContractError::VerificationError {});
     };
 
-    let journal = receipt.get_journal_vec().unwrap();
-    println!("{:?}", journal);
-    // let digest = risc0_zkvm_serde::from_slice::<Digest>(&journal).unwrap();
-    // println!("{:?}", digest);
+    // let journal = receipt.get_journal_vec()?;
+    // println!("{:?}", journal);
 
     Ok(Response::default())
 }
