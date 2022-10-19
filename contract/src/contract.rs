@@ -6,9 +6,10 @@ use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult}
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
 
-use risc0_zkvm::host::ffi::Receipt;
+use risc0_zkvm::host::{MethodId, Receipt};
 use risc0_zkvm_core::Digest;
-use risc0_zkvm_verify::zkvm::{MethodID, Receipt};
+
+use methods::{MULTIPLY_ID, MULTIPLY_PATH};
 
 use methods;
 
@@ -41,22 +42,18 @@ pub fn execute(
 }
 
 pub fn verify_receipt(receipt: String) -> Result<Response, ContractError> {
-    let method_id = MethodID::try_from(methods::MULTIPLY_ID).unwrap();
     let as_bytes = base64::decode(receipt).unwrap();
     let receipt = bincode::deserialize::<Receipt>(&as_bytes).unwrap();
-    print_type_of(&receipt);
 
     // Verify that the zero knowledge proof is valid
-    // PANCIS
-    if !receipt.verify(&method_id).is_ok() {
+    if !receipt.verify(MULTIPLY_ID).is_ok() {
         return Err(ContractError::VerificationError {});
     };
 
-    let journal = receipt.get_journal_u32();
+    let journal = receipt.get_journal_vec().unwrap();
     println!("{:?}", journal);
-    let digest = risc0_zkvm_serde::from_slice::<Digest>(&journal).unwrap();
-
-    println!("{:?}", digest);
+    // let digest = risc0_zkvm_serde::from_slice::<Digest>(&journal).unwrap();
+    // println!("{:?}", digest);
 
     Ok(Response::default())
 }
@@ -106,13 +103,14 @@ mod tests {
         let encoded_receipt = base64::encode(bincode::serialize(&receipt).unwrap());
         // println!("{}", encoded_receipt);
 
-        //
+        // Call verify receipt contract method
         let res = verify_receipt(encoded_receipt);
         println!("{:?}", res);
-        // assert!(res.is_ok());
+        assert!(res.is_ok());
     }
 }
 
+// TODO remove this debug util
 fn print_type_of<T>(_: &T) {
     println!("{}", std::any::type_name::<T>())
 }
