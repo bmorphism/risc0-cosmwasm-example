@@ -50,7 +50,9 @@ pub fn verify_receipt(
     let receipt = bincode::deserialize::<Receipt>(&as_bytes).unwrap();
 
     // Verify that the zero knowledge proof is valid
-    receipt.verify(&method_id)?;
+    if !receipt.verify(&method_id).is_ok() {
+        return Err(ContractError::VerificationError {});
+    };
 
     let journal = receipt.get_journal_u32();
     let digest = risc0_zkvm_serde::from_slice::<Digest>(&journal).unwrap();
@@ -66,4 +68,15 @@ pub fn query(_deps: Deps, _env: Env, _msg: QueryMsg) -> StdResult<Binary> {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use cosmwasm_std::testing::{mock_dependencies, mock_env, mock_info};
+
+    use super::*;
+
+    #[test]
+    fn test_verify_recipt() {
+        let mock_deps = mock_dependencies();
+        let mock_env = mock_env();
+        let mock_info = mock_info("meow", []);
+    }
+}
