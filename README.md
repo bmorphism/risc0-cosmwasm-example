@@ -1,25 +1,17 @@
-# RISC Zero Rust Starter
+# cosmwasm-risc0: RISC-V zkVM + CosmWasm 🐈‍⬛
+## What is this?
+[CosmWasm](https://github.com/CosmWasm/cosmwasm) is for building smart contracts targeting server-side wasm
+[RISC Zero](https://github.com/risc0/risc0) is a verifiable **general computing platform** based on **zk-STARKs** and the **RISC-V** microarchitecture.
 
-The `risc0-rust-starter` repository is a minimal starting project for zero-knowledge software development. In this RISC Zero "Hello World" project, we use zero-knowledge proof techniques to prove that we know the factors of some composite number `N`, without revealing what the factors are. 
+This example exists to establish patterns of use of CosmWasm and risc0 to build smart contracts with robust privacy and correctness guarantees. The possibility to carry out **general purpose computation** privately in a way that is verifiably the codebase intended, and using RISC-V instruction set that will could be accelerated using hardware in the future is a very exciting and powerful combination that we believe is worth exploring.
+## zkVM
+A zero-knowledge virtual machine (zkVM) is a virtual machine that runs trusted code and generates proofs that authenticate the zkVM output. RISC Zero's zkVM implementation, based on the RISC-V architecture, executes code and produces a computational receipt.
 
-For more information, check out the [risc0/risc0 repository](https://www.github.com/risc0/risc0) and the [RISC Zero website](https://www.RISCZero.com).
+The codebase was adapted from `risc0-rust-starter` repository and is intended to be a minimal starting point for `zkCosmWasm` development. In this instance, we perform multiplication to prove that we know the factors of `1337`.
 
-# Quick Start
+## What's next?
+Let's implement a CosmWasm [tic-tac-toe](https://github.com/bmorphism/risc0-cosmwasm-example/issues/1) as a foundation for more complex games and protocols!
 
-First, make sure [rustup](https://rustup.rs) is installed. This project uses a [nightly](https://doc.rust-lang.org/book/appendix-07-nightly-rust.html) version of [Rust](https://doc.rust-lang.org/book/ch01-01-installation.html). The [`rust-toolchain`](rust-toolchain) file will be used by `cargo` to automatically install the correct version.
-
-To build all methods and execute the method within the zkVM, run the following command:
-
-```
-cargo run --release
-```
-
-## Zero-Knowledge Programs
-
-A zkVM program is composed of a `host` and a `guest`. The [host](starter/src/main.rs) code runs like any other rust program and launches a zkVM instance using the [Prover](https://docs.rs/risc0-zkvm-host/0.10.0/risc0_zkvm_host/struct.Prover.html) interface. The [guest](methods/guest/src/bin/multiply.rs) code is compiled for `riscv32im` and runs inside a zkVM. Guest code does not have access to `std` since the zkVM is similar to an embedded system. Use the [env](https://docs.rs/risc0-zkvm-guest/0.10.0/risc0_zkvm_guest/env/index.html) in your zkVM guest code to communicate with the host.
-
-## Contributor's Guide
-We welcome contributions to documentation and code via [PRs and GitHub Issues](http://www.github.com/risc0).
-
-## Questions, Feedback, and Collaborations
-We'd love to hear from you on [Discord](https://discord.gg/risczero) or [Twitter](https://twitter.com/risczero).
+## Authors
+- [Jake Hartnell](https://twitter.com/jakehartnell)
+- [Barton Rhodes](https://twitter.com/bmorphism)
